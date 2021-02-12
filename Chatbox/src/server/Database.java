@@ -103,3 +103,16 @@ public class Database {
     }
 }
 
+class Tester {
+    /**
+     * Example usage of Database to execute SQL.
+     * 
+     * @param args
+     * @throws InterruptedException
+     */
+    public static void main(String[] args) throws InterruptedException {
+        handleRequests(1);
+        handleRequests(2);
+        handleRequests(3);
+    }
+
