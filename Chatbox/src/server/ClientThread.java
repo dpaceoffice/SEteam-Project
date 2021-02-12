@@ -62,6 +62,28 @@ public class ClientThread extends Server implements Runnable {
 		}
 	}
 
+	public boolean pingTest() {
+		int ping = 0;
+		if (ping > 0) {
+			--ping;
+			System.out.println(ping);
+		} else {
+			try {
+				if (outDataWrapper != null) {
+					outDataWrapper.writeInt(100);// Ping
+					outDataWrapper.flush();
+				}
+			} catch (IOException e) {
+				clients.remove(this);
+				e.printStackTrace();
+				return false;
+			}
+
+			ping = 100;
+			System.out.println("Sent Ping");
+		}
+		return true;
+	}
 
 	public DataOutputStream getOutWrapper() {
 		return outDataWrapper;
