@@ -61,3 +61,14 @@ public class ClientThread extends Server implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+
+	public DataOutputStream getOutWrapper() {
+		return outDataWrapper;
+	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+
+}
