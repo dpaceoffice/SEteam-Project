@@ -20,3 +20,11 @@ public class ClientThread extends Server implements Runnable {
 		this.socket = socket;
 	}
 
+	/**
+	 * Text output stream
+	 * 
+	 * @return PrintWriter output
+	 */
+	private PrintWriter getWriter() {
+		return outPrintWrapper;
+	}
