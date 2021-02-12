@@ -97,3 +97,9 @@ public class Database {
         }
         return true;
     }
+
+    public Connection getCon() {
+        return con;
+    }
+}
+
