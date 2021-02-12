@@ -116,3 +116,28 @@ class Tester {
         handleRequests(3);
     }
 
+    /**
+     * Starts a new thread and executes SQL on it.
+     * Uses ability to insert row as an indicator if account name is avaliable
+     * @param thread - integer used to distinguish threads
+     */
+    public static void handleRequests(int thread) {
+        Database db = Database.getInstance();
+        new Thread(new Runnable() {
+            public void run() {
+                String name = null;
+                try {
+                    for (int i = 0; i < 100; i++) {
+                        // System.out.println(i);
+                        name = "billybobjoes"+i;
+                        boolean checkName = db.insertRow(name, "Test");
+                        System.out.println(""+thread+": Name: " + name +" Avaliabile: "+checkName);
+                    }
+                   // db.fetchAll();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+}
