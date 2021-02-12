@@ -32,3 +32,20 @@ public class Client {
 		this.ipAddress = ipAddress;
 		this.port = port;
 	}
+
+	/**
+	 * Simple method of requesting a name to use
+	 */
+	private void reqName() {
+		String name = null;
+		scan = new Scanner(System.in);
+		System.out.println("Please input username:");
+		while (name == null || name.trim().equals("")) {
+			// null, empty, whitespace(s) not allowed.
+			name = scan.nextLine();
+			if (name.trim().equals("")) {
+				System.out.println("Invalid. Please enter again:");
+			}
+		}
+		this.name = name;
+	}
