@@ -28,3 +28,36 @@ public class ClientThread extends Server implements Runnable {
 	private PrintWriter getWriter() {
 		return outPrintWrapper;
 	}
+
+	@Override
+	public void run() {
+		try {
+			// Client output stream, where the server sends information
+			outPrintWrapper = new PrintWriter(socket.getOutputStream(), false);
+			outDataWrapper = new DataOutputStream(socket.getOutputStream());
+			// Clients input sream, where the server recieves information
+			Scanner in = new Scanner(socket.getInputStream());
+			while (!socket.isClosed()) {// listening for input from thread
+				if (in.hasNextLine()) {// if recieved input
+					String input = in.nextLine();// initlize input as string
+
+					// send input as output to all active threads including this one with user name
+					for (ClientThread client : clients) {
+						// get current threads output stream
+						PrintWriter outWriter = client.getWriter();
+						DataOutputStream numWriter = client.getOutWrapper();
+						// null pointer exception check
+						if (outWriter != null) {
+							numWriter.writeInt(1);// String
+							outWriter.write(input + "\r\n");
+							outWriter.flush();
+							numWriter.flush();
+						}
+					}
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
