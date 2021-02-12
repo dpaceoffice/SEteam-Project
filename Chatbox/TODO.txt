@@ -1,0 +1,8 @@
+Done: Create network handling to communicate messages sent from one client to rest
+Done: Create framework for handling SQLite database
+Create password encryption
+Create network handling so users can register accounts with SQLite DB
+Create network handling so users can log into registered accounts
+Create interface for registration
+Create interface for login
+Create interface for chatbox
