@@ -31,3 +31,15 @@ public class ServerThread implements Runnable {
 		this.userName = userName;
 		queuedMessages = new LinkedList<String>();
 	}
+
+	/**
+	 * Queues a string message to be sent to server
+	 * 
+	 * @param message
+	 */
+	public void appendMessage(String message) {
+		synchronized (queuedMessages) {
+			queuedMessages.push(message);
+		}
+	}
+
