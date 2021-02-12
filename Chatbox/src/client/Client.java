@@ -71,3 +71,11 @@ public class Client {
 			ex.printStackTrace();
 		}
 	}
+
+	public static void main(String[] args) {
+		Client client = new Client(HOST, PORT);
+		client.reqName();
+		client.startClient();
+	}
+
+}
