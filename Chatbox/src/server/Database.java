@@ -52,3 +52,22 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Checks if a name is avaliable
+     * 
+     * @param name
+     * @return true if name is avaliable
+     */
+    public boolean nameAvaliable(String name) {
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT username FROM registered_users WHERE username='" + name + "'");
+            while (rs.next()) {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
