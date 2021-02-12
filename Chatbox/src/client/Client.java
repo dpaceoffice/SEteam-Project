@@ -49,3 +49,25 @@ public class Client {
 		}
 		this.name = name;
 	}
+
+	/**
+	 * Starts the thread that listens for messages from server
+	 * Also keeps track of keyboard input on client's parent thread (Client) to send to child thread (ServerThread)
+	 */
+	private void startClient() {
+		try {
+			Socket socket = new Socket(ipAddress, port);
+			ServerThread serverThread = new ServerThread(socket, name);
+			Thread thread = new Thread(serverThread);
+			thread.start();
+			while (thread.isAlive()) {
+				if (scan.hasNextLine()) {
+					serverThread.appendMessage(scan.nextLine());
+				}
+			}
+			System.out.println("Server thread died");
+			scan.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
