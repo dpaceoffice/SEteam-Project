@@ -71,3 +71,29 @@ public class Database {
         }
         return true;
     }
+
+    /**
+     * Inserts row into sqlite db, must be synchronized since we are using threads
+     * and this modifys the db.
+     * 
+     * Can also be used to check if the account name is avaliable, better than using nameAvaliable() 
+     * since one name might concurrently be created
+     * 
+     * @param name
+     * @param password
+     */
+    public synchronized boolean insertRow(String name, String password) {
+        try {
+            PreparedStatement stmt = con
+                    .prepareStatement("INSERT INTO registered_users (username, password) VALUES (?, ?)");
+            stmt.setString(1, name);
+            stmt.setString(2, password);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            if(e.getErrorCode() == 19)//if primary key constraint failed
+                return false;//account must exist, should only happen if same name created concurrently
+            else
+                e.printStackTrace();
+        }
+        return true;
+    }
