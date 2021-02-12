@@ -43,3 +43,44 @@ public class ServerThread implements Runnable {
 		}
 	}
 
+	/**
+	 * Thread handling for incomming server messages and to send client input back to
+	 * server
+	 */
+	@Override
+	public void run() {
+		System.out.println("Welcome, " + userName + ", you have connected successfully!");
+
+		try {
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			InputStream in = socket.getInputStream();
+			Scanner inputScanner = new Scanner(in);
+			DataInputStream numInput = new DataInputStream(in);
+			
+			while (!socket.isClosed()) {
+				if(numInput.available() > 0) {
+					int packet = numInput.readInt();
+					System.out.println("Packet Recieved: "+packet);
+					if(packet == 100)
+						System.out.println("Ping");
+					else if(packet == 1) {
+						//if(inputScanner.hasNextLine())
+							System.out.println(inputScanner.nextLine());
+					}
+				} 
+
+				if (!queuedMessages.isEmpty()) {//from us
+					String msg = "";
+					synchronized (queuedMessages) {
+						msg = queuedMessages.pop();
+					}
+					out.println(userName + ": " + msg);
+				}
+			}
+			inputScanner.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+	}
+}
