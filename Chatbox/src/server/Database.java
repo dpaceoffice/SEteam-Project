@@ -30,3 +30,25 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Fetches all the registed users
+     */
+    public void fetchAll() {
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM registered_users");
+            boolean flag = false;
+            while (rs.next()) {
+                flag = true;
+                String name = rs.getString("username");
+                // String password = rs.getString("password");//needs password encryption
+                System.out.println("Name: " + name);
+            }
+            if (!flag)
+                System.out.println("Empty set");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
