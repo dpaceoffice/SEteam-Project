@@ -24,3 +24,11 @@ public class Client {
 	private String ipAddress;
 	private int port;
 	private Scanner scan;
+
+	/**
+	 * Constructor
+	 */
+	private Client(String ipAddress, int port) {
+		this.ipAddress = ipAddress;
+		this.port = port;
+	}
