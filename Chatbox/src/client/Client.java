@@ -21,6 +21,7 @@ public class Client {
 	 * State variables
 	 */
 	private String name;
+	private String password;
 	private String ipAddress;
 	private int port;
 	private Scanner scan;
@@ -50,6 +51,28 @@ public class Client {
 		this.name = name;
 	}
 
+	// Request password from the user 
+	//@TODO savinng in DB;
+	private void reqPassword() {
+		String password = null;
+		scan = new Scanner(System.in);
+		System.out.println("Please input password:");
+		while (password == null || password.trim().equals("")) {
+			// null, empty, whitespace(s) not allowed.
+			password = scan.nextLine();
+			if (password.trim().equals("")) {
+				System.out.println("Invalid. Please enter again:");
+			}
+		}
+		this.password =  BCrypt.hashpw(password, BCrypt.gensalt(12));
+		System.out.println(this.password);
+	}
+
+	// Checks if the password matches
+	private boolean checkPassword(String originalPassword, String generatedSecuredPasswordHash) {
+		return BCrypt.checkpw(originalPassword, generatedSecuredPasswordHash);
+	}
+
 	/**
 	 * Starts the thread that listens for messages from server
 	 * Also keeps track of keyboard input on client's parent thread (Client) to send to child thread (ServerThread)
@@ -75,6 +98,7 @@ public class Client {
 	public static void main(String[] args) {
 		Client client = new Client(HOST, PORT);
 		client.reqName();
+		client.reqPassword();
 		client.startClient();
 	}
 
