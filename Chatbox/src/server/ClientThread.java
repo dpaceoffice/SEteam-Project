@@ -67,8 +67,6 @@ public class ClientThread extends Server implements Runnable {
 			}
 
 		} catch (Exception e) {
-			if (e instanceof SocketException)
-				return;
 			e.printStackTrace();
 		}
 	}
