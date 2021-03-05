@@ -60,6 +60,7 @@ public class ClientThread extends Server implements Runnable {
 						System.out.println("Disconnected Connection: " + socket.getInetAddress() + " Remaining Users: "
 								+ clients.size());
 						d_out.writeInt(1000);// after a minute of not talking with the client we remove it
+						Thread.sleep(1000);//wait a second before closing the socket to make sure the int gets sent properly
 						socket.close();
 					}
 				}
