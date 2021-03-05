@@ -53,7 +53,7 @@ public class ClientThread extends Server implements Runnable {
 				} else {
 					if (timeout > 0) {
 						timeout--;
-						Thread.sleep(1);// we need the threat to sleep for atleast a milisecond to properly time the
+						Thread.sleep(1);// we need the thread to sleep for atleast a milisecond to properly time the
 										// ping
 					} else {
 						clients.remove(this);
