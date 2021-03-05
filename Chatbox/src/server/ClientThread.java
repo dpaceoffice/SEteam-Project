@@ -9,9 +9,11 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class ClientThread extends Server implements Runnable {
+
 	private Socket socket;
-	private PrintWriter outPrintWrapper;
-	private DataOutputStream outDataWrapper;
+	private DataOutputStream d_out;
+	private int timeout;
+	private int MILI_DELAY = 1000 * 60 * 1;// default timeout: mili * sec * min = 1 min long
 
 	/**
 	 * Constructor
