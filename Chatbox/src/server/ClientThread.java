@@ -22,15 +22,12 @@ public class ClientThread extends Server implements Runnable {
 	 */
 	public ClientThread(Socket socket) {
 		this.socket = socket;
-	}
-
-	/**
-	 * Text output stream
-	 * 
-	 * @return PrintWriter output
-	 */
-	private PrintWriter getWriter() {
-		return outPrintWrapper;
+		try {
+			d_out = new DataOutputStream(socket.getOutputStream());// for packet identification
+			timeout = MILI_DELAY;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
