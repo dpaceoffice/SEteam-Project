@@ -43,43 +43,52 @@ public class ServerThread implements Runnable {
 	}
 
 	/**
-	 * Thread handling for incomming server messages and to send client input back to
-	 * server
+	 * Thread handling for incomming server messages and to send client input back
+	 * to server
 	 */
 	@Override
 	public void run() {
-		System.out.println("Welcome, " + userName + ", you have connected successfully!");
-
 		try {
-			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-			InputStream in = socket.getInputStream();
-			Scanner inputScanner = new Scanner(in);
-			DataInputStream numInput = new DataInputStream(in);
-			
-			while (!socket.isClosed()) {
-				if(numInput.available() > 0) {
-					int packet = numInput.readInt();
-					System.out.println("Packet Recieved: "+packet);
-					if(packet == 100)
-						System.out.println("Ping");
-					else if(packet == 1) {
-						//if(inputScanner.hasNextLine())
-							System.out.println(inputScanner.nextLine());
-					}
-				} 
 
-				if (!queuedMessages.isEmpty()) {//from us
+			DataOutputStream d_out = new DataOutputStream(socket.getOutputStream());// write packet ints
+
+			DataInputStream d_in = new DataInputStream(socket.getInputStream());// reader for ints
+			BufferedReader b_in = new BufferedReader(new InputStreamReader(socket.getInputStream()));// text input
+
+			d_out.writeInt(2);// tells the server client information
+			d_out.writeBytes(userName + "\n");
+
+			while (!socket.isClosed()) {
+				if (socket.getInputStream().available() > 0) {
+					int packet = d_in.readInt();
+					// System.out.println("Packet Recieved: " + packet);
+
+					if (packet == 1) {
+						System.out.println(b_in.readLine());
+					} else if (packet == 1000) {// if client recieves this server closed socket
+						System.out.println("You have been disconnected for being idle");
+						socket.close();
+						System.exit(0);
+					}
+				}
+
+				if (!queuedMessages.isEmpty()) {
 					String msg = "";
 					synchronized (queuedMessages) {
 						msg = queuedMessages.pop();
 					}
-					out.println(userName + ": " + msg);
+					if (!msg.isEmpty()) {
+						d_out.writeInt(1000);// refresh idle
+						d_out.writeInt(1);// string packet
+						d_out.writeBytes(userName + ": " + msg + "\n");
+					} else
+						System.out.println("Error: Blank Message");
 				}
+
 			}
-			inputScanner.close();
-		} catch (IOException ex) {
+
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 }
