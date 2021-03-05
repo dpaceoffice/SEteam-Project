@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
+
 /**
  * Main client class
  */
@@ -11,7 +12,7 @@ public class Client {
 	 * Host ip address
 	 */
 	private static final String HOST = "127.0.0.1";
-	
+
 	/**
 	 * Open port to connect to
 	 */
@@ -74,8 +75,9 @@ public class Client {
 	}
 
 	/**
-	 * Starts the thread that listens for messages from server
-	 * Also keeps track of keyboard input on client's parent thread (Client) to send to child thread (ServerThread)
+	 * Starts the thread that listens for messages from server Also keeps track of
+	 * keyboard input on client's parent thread (Client) to send to child thread
+	 * (ServerThread)
 	 */
 	private void startClient() {
 		try {
@@ -88,7 +90,6 @@ public class Client {
 					serverThread.appendMessage(scan.nextLine());
 				}
 			}
-			System.out.println("Server thread died");
 			scan.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
