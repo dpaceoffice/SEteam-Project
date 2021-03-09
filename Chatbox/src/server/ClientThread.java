@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class ClientThread extends Server implements Runnable {
 
@@ -53,21 +52,20 @@ public class ClientThread extends Server implements Runnable {
 				} else {
 					if (timeout > 0) {
 						timeout--;
-						Thread.sleep(1);// we need the threat to sleep for atleast a milisecond to properly time the
+						Thread.sleep(1);// we need the thread to sleep for atleast a milisecond to properly time the
 										// ping
 					} else {
 						clients.remove(this);
 						System.out.println("Disconnected Connection: " + socket.getInetAddress() + " Remaining Users: "
 								+ clients.size());
 						d_out.writeInt(1000);// after a minute of not talking with the client we remove it
+						Thread.sleep(1000);//wait a second before closing the socket to make sure the int gets sent properly
 						socket.close();
 					}
 				}
 			}
 
 		} catch (Exception e) {
-			if (e instanceof SocketException)
-				return;
 			e.printStackTrace();
 		}
 	}
