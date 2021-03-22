@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+import client.Threading.ServerThread;
+
 /**
  * Main client class
  */
