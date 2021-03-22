@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+import client.Threading.ServerThread;
+
 /**
  * Main client class
  */
@@ -21,10 +23,10 @@ public class Client {
 	/**
 	 * State variables
 	 */
-	private String name;
 	private String ipAddress;
 	private int port;
 	private Scanner scan;
+	private Thread thread;
 
 	/**
 	 * Constructor
@@ -37,7 +39,7 @@ public class Client {
 	/**
 	 * Simple method of requesting a name to use
 	 */
-	private void reqName() {
+	/*private void reqName() {
 		String name = null;
 		scan = new Scanner(System.in);
 		System.out.println("Please input username:");
@@ -49,7 +51,7 @@ public class Client {
 			}
 		}
 		this.name = name;
-	}
+	}*/
 
 	/**
 	 * Starts the thread that listens for messages from server Also keeps track of
@@ -59,15 +61,16 @@ public class Client {
 	private void startClient() {
 		try {
 			Socket socket = new Socket(ipAddress, port);
-			ServerThread serverThread = new ServerThread(socket, name);
-			Thread thread = new Thread(serverThread);
+			ServerThread serverThread = new ServerThread(socket, this);
+			this.scan = new Scanner(System.in);
+			thread = new Thread(serverThread);
 			thread.start();
 			while (thread.isAlive()) {
-				if (scan.hasNextLine()) {
-					serverThread.appendMessage(scan.nextLine());
+				if(scan.hasNextLine()) {
+					String msg = scan.nextLine();
+					serverThread.appendMessage(msg);
 				}
 			}
-			scan.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -75,7 +78,7 @@ public class Client {
 
 	public static void main(String[] args) {
 		Client client = new Client(HOST, PORT);
-		client.reqName();
+		//client.reqName();
 		client.startClient();
 	}
 
