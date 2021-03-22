@@ -75,6 +75,7 @@ public class Server extends Packet {
 
 	/**
 	 * Distrubutes message to every client on network
+	 * 
 	 * @param msg
 	 */
 	public void distributeMessage(String msg, int index) {
@@ -83,24 +84,29 @@ public class Server extends Packet {
 			// send input as output to all active threads including this one with user name
 			// BufferedWriter b_out = null;
 			DataOutputStream d_out = null;
-			for (int i = lastIndex; i <= clients.size()-1; i++) {
+			for (int i = lastIndex; i <= clients.size() - 1; i++) {
 				// get current threads output stream
 				// b_out = client.getbWriter();
-				lastIndex = i;//update any changes to the last index we used.
-				d_out = clients.get(lastIndex).getdOutputStream();
+				ClientThread client = clients.get(i);
+				lastIndex = i;// update any changes to the last index we used.
+				if (client.getUser() == null || client.getUser().getState() != State.CHATTING)
+					continue;
+				d_out = client.getdOutputStream();
 				if (d_out != null) {
-					d_out.writeInt(1);// String packet
-					d_out.writeBytes(msg + "\n");
+					d_out.writeInt(MESSAGE_PACKET);// String packet
+					d_out.writeBytes("SERVER->" + msg + "\n");
 				}
 			}
 		} catch (IOException e) {
-			if (e instanceof SocketException) // if this happens its probably because the client closed before the server reaped
+			if (e instanceof SocketException) // if this happens its probably because the client closed before the
+												// server reaped
 												// the thread.
 				if (e.getMessage().contains("Connection reset by peer")) {
 					ClientThread last = clients.get(lastIndex);
 					clients.remove(lastIndex);
-					System.out.println(""+last.toString()+": Disconnected early \n Remaining Users: "+clients.size()+"");
-					distributeMessage(msg, lastIndex);//picks up where we left off.
+					System.out.println(
+							"Disconnted Early:" + last.toString() + " Remaining Users: " + clients.size() + "");
+					distributeMessage(msg, lastIndex);// picks up where we left off.
 					return;
 				}
 			e.printStackTrace();
