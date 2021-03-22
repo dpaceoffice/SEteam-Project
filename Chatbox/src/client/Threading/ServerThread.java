@@ -126,8 +126,35 @@ public class ServerThread extends Packet implements Runnable {
 			d_out.writeInt(LOGIN_CHECK);
 			d_out.writeBytes(username + "\n");
 			d_out.writeBytes(pass + "\n");
+			this.username = username;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void changeState(int state) {
+		try {
+			setState(State.values()[state]);
+			d_out.writeInt(STATE_CHANGE);
+			d_out.writeInt(state);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	private void setState(State state) {
+		this.state = state;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
 	}
 }
