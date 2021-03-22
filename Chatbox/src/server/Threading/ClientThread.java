@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 
+
 import server.Server;
 import server.Users.State;
 import server.Users.User;
@@ -18,7 +19,7 @@ public class ClientThread extends Server implements Runnable {
 	private DataOutputStream d_out;
 	private DataInputStream d_in;
 	private BufferedReader b_in;
-	private int timeout;
+	private int timeout, ping;
 	private User user; // user on thread
 	private int MILI_DELAY = 1000 * 60 * 1;// default timeout: mili * sec * min = 1 min long
 
@@ -89,8 +90,13 @@ public class ClientThread extends Server implements Runnable {
 					//state check here
 					if (timeout > 0) {
 						timeout--;
+						ping ++;
+						if(ping >= 5000) {
+							d_out.writeInt(IDLE_PACKET);// check if this user has an open connection about every 5 seconds
+						}
 						Thread.sleep(1);// we need the thread to sleep for atleast a milisecond to properly time the
 										// ping
+					
 					} else {
 						clients.remove(this);
 						d_out.writeInt(DISCONNECT_PACKET);// after TIMEOUT we let the client know we are ending things
