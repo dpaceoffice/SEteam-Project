@@ -22,6 +22,56 @@ public class ClientThread extends Server implements Runnable {
 	private User user; // user on thread
 	private int MILI_DELAY = 1000 * 60 * 1;// default timeout: mili * sec * min = 1 min long
 
+	/**
+	 * Constructor
+	 * 
+	 * @param socket = open socket
+	 */
+	public ClientThread(Socket socket) {
+		this.socket = socket;
+		try {
+			d_out = new DataOutputStream(socket.getOutputStream());// for packet identification
+			d_in = new DataInputStream(socket.getInputStream());// reader for ints
+			b_in = new BufferedReader(new InputStreamReader(socket.getInputStream()));// text input
+			timeout = MILI_DELAY;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Handles packets that come from the client
+	 * @param packetId
+	 * @throws IOException
+	 */
+	private void handleIncommingPackets(int packetId) throws IOException {
+		if (packetId == IDLE_PACKET) {// ping
+			timeout = MILI_DELAY;
+		} else if (packetId == USERNAME_REQ) {
+			String username = b_in.readLine();
+			this.user = new User(this, username, "password");//creates user object
+			d_out.writeInt(MESSAGE_PACKET);
+			d_out.writeBytes("Welcome " + username + " to the chatbox!\n");
+		} else if (packetId == MESSAGE_PACKET) {// message
+			String msg = b_in.readLine();
+			distributeMessage(msg);
+		} else if(packetId == LOGIN_CHECK) {
+			String username = b_in.readLine();
+			String password = b_in.readLine();
+			User user = new User(this, username, password);
+			d_out.writeInt(LOGIN_CHECK);
+			if(user.userExists()) {
+				if(user.checkPassword(password)) 
+					d_out.writeInt(1);//success
+				else
+					d_out.writeInt(0);//fail
+			} else
+				d_out.writeInt(0);
+				//user.saveUser();//doesn't exist? just create it.
+
+		}
+	}
+
 	@Override
 	public void run() {
 		try {
