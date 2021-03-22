@@ -107,10 +107,10 @@ public class ServerThread extends Packet implements Runnable {
 	}
 
 	private void handleIncommingPackets(int packetId) throws IOException {
-		if (packetId == MESSAGE_PACKET) {
+		if(packetId == IDLE_PACKET) {
+			d_out.writeInt(IDLE_PACKET);
+		} else if (packetId == MESSAGE_PACKET) {
 			System.out.println(b_in.readLine());
-		} else if(packetId == IDLE_PACKET) {
-			//idle packet, don't do anything
 		} else if (packetId == DISCONNECT_PACKET) {// if client recieves this server closed socket
 			System.out.println("You have been disconnected for being idle");
 			socket.close();
