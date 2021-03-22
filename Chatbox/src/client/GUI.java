@@ -177,7 +177,12 @@ public class GUI extends javax.swing.JFrame {
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
         infoPanel.setVisible(false);
-        loginPanel.setVisible(true);
+        if(backButton.getText().equals("Continue")) {
+            thread.changeState(State.CHATTING.ordinal());
+            this.setVisible(false);
+            System.out.println("Enter a message below to chat:");
+        } else
+            loginPanel.setVisible(true);
     }
 
     /**
