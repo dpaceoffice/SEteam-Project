@@ -85,22 +85,22 @@ public class ServerThread extends Packet implements Runnable {
 				if (socket.getInputStream().available() > 0) {
 					int packetId = d_in.readInt();
 					handleIncommingPackets(packetId);
-				}
+				} 
 				if (!queuedMessages.isEmpty()) {
-					String msg = "";
-					synchronized (queuedMessages) {
-						msg = queuedMessages.pop();
+						String msg = "";
+						synchronized (queuedMessages) {
+							msg = queuedMessages.pop();
+						}
+						if (state == State.CHATTING) {
+						if (!msg.isEmpty()) {
+							//d_out.writeInt(IDLE_PACKET);
+							d_out.writeInt(MESSAGE_PACKET);// string packet
+							d_out.writeBytes(username + ": " + msg + "\n");
+						} else
+							System.out.println("Error: Blank Message");
+						}
 					}
-					if (!msg.isEmpty()) {
-						d_out.writeInt(IDLE_PACKET);
-						d_out.writeInt(MESSAGE_PACKET);// string packet
-						d_out.writeBytes(userName + ": " + msg + "\n");
-					} else
-						System.out.println("Error: Blank Message");
 				}
-
-			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
