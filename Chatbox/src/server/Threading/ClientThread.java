@@ -57,17 +57,25 @@ public class ClientThread extends Server implements Runnable {
 		} else if(packetId == LOGIN_CHECK) {
 			String username = b_in.readLine();
 			String password = b_in.readLine();
-			User user = new User(this, username, password);
+			user = new User(this, username, password);
 			d_out.writeInt(LOGIN_CHECK);
-			if(user.userExists()) {
+			if(user.userExists()) 
 				if(user.checkPassword(password)) 
-					d_out.writeInt(1);//success
+					if(!isOnline(username))
+						d_out.writeInt(1);//success
+					else
+						d_out.writeInt(3);//already logged in
 				else
-					d_out.writeInt(0);//fail
-			} else
-				d_out.writeInt(0);
+					d_out.writeInt(0);//password failure
+			else
+				d_out.writeInt(4);//user doesn't exist
 				//user.saveUser();//doesn't exist? just create it.
-
+		} else if(packetId == STATE_CHANGE) {
+			int state = d_in.readInt();
+			//System.out.println("State adjusted for "+user.getUsername()+" to: "+State.values()[state]);
+			user.setState(State.values()[state]);
+			if(State.values()[state] == State.CHATTING)
+			   distributeMessage("Everyone, welcome "+user.getUsername()+", to the chat!");
 		}
 	}
 
