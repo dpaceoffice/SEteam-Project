@@ -33,17 +33,18 @@ public class ServerThread extends Packet implements Runnable {
 	 * Constructor
 	 * 
 	 * @param socket   - socket used to connect to server
-	 * @param userName - display name picked by user
+	 * @param username - display name picked by user
 	 * @throws IOException
 	 */
-	public ServerThread(Socket socket, String userName) throws IOException {
+	public ServerThread(Socket socket, Client client) throws IOException {
 		this.socket = socket;
-		this.userName = userName;
+		this.client = client;
 		queuedMessages = new LinkedList<String>();
 		d_out = new DataOutputStream(socket.getOutputStream());// write packet ints
 		d_in = new DataInputStream(socket.getInputStream());// reader for ints
 		b_in = new BufferedReader(new InputStreamReader(socket.getInputStream()));// text input
-		ServerThread save = this;
+		this.state = State.LOGIN;
+		ServerThread thread = this;
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -56,7 +57,7 @@ public class ServerThread extends Packet implements Runnable {
 		}
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				gui = new GUI(save);
+				gui = new GUI(thread, client);
 				gui.setVisible(true);
 			}
 		});
