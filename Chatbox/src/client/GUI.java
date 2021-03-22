@@ -4,15 +4,22 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import client.Threading.ServerThread;
+import client.Threading.State;
+
 
 public class GUI extends javax.swing.JFrame {
 
+    /**
+     * Default seralization value
+     */
+    private static final long serialVersionUID = 1L;
     private ServerThread thread;
+
 
     /**
      * Creates new form GUI
      */
-    public GUI(ServerThread thread) {
+    public GUI(ServerThread thread, Client client) {
         this.thread = thread;
         initComponents();
     }
