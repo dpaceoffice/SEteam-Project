@@ -112,8 +112,8 @@ public class ClientThread extends Server implements Runnable {
 		} catch (Exception e) {
 			if (e instanceof SocketException)
 				if (e.getMessage().contains("Connection reset by peer")) {
-					System.out.println("Early disconnect:" + toString() + " Remaining Users: " + clients.size());
 					clients.remove(this);
+					System.out.println("Early disconnect:" + toString() + " Remaining Users: " + clients.size());
 					return;
 				}
 			e.printStackTrace();
