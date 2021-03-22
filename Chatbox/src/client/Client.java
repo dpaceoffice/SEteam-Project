@@ -23,7 +23,6 @@ public class Client {
 	/**
 	 * State variables
 	 */
-	private String name;
 	private String ipAddress;
 	private int port;
 	private Scanner scan;
