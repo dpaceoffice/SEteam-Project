@@ -49,28 +49,14 @@ public class Server extends Packet {
 
 	public boolean isOnline(String username) {
 		ClientThread current = null;
-		try {
+		//try {
 			for (ClientThread client : clients) {
 				if (client.getUser() != null)
 					if (client.getUser().getUsername().equals(username))
-						if (client.getUser().getState() == State.CHATTING) {
-							current = client;
-							DataOutputStream d_out = client.getdOutputStream();
-							d_out.writeInt(IDLE_PACKET);// check if this user has an open connection
+						if (client.getUser().getState() == State.CHATTING) 
 							return true;
-						}
 			}
-		} catch (IOException e) {//if the connection was closed early we can go ahead and reap this connection and try again.
-			if (e instanceof SocketException)
-				if (e.getMessage().contains("Connection reset by peer")) {
-					clients.remove(current);
-					System.out.println(
-							"Disconnted Early:" + current.toString() + " Remaining Users: " + clients.size() + "");
-					return false;
-				}
-			e.printStackTrace();
-		}
-		return false;
+			return false;
 	}
 
 	/**
