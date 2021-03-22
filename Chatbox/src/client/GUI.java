@@ -158,11 +158,18 @@ public class GUI extends javax.swing.JFrame {
         thread.checkLogin(username, pass);
     }
 
-    public void handleLoginReq(boolean success) {
-        if(success) 
-            infoPane.setText("Success!");
-        else
-            infoPane.setText("Fail!");
+    public void handleLoginReq(int opcode) {
+        backButton.setText("Back");
+        if(opcode == 1) {
+            infoPane.setText("Success!\nPress the continue button to begin chatting!");
+            backButton.setText("Continue");
+        } else if(opcode == 3) {
+            infoPane.setText("Failure!\nThis account seems to already be logged in!");
+        } else if(opcode == 4) {
+            infoPane.setText("Failure!\nThis username doesn't exist!");
+        } else {
+            infoPane.setText("Failure!\nThe username and password you entered is incorrect!");
+        }
         infoPanel.setVisible(true);
         loginPanel.setVisible(false);
     
