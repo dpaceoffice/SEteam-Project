@@ -7,13 +7,15 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-public class Server {
+import server.Threading.ClientThread;
+import server.Threading.Packet;
+
+public class Server extends Packet {
 
 	/**
 	 * Arraylist to keep track of active threads
 	 */
 	public static ArrayList<ClientThread> clients;
-	private ClientThread last = null;
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) {
