@@ -45,13 +45,12 @@ public class ClientThread extends Server implements Runnable {
 	 * @throws IOException
 	 */
 	private void handleIncommingPackets(int packetId) throws IOException {
-		timeout = MILI_DELAY;
-		if (packetId == USERNAME_REQ) {
-			String username = b_in.readLine();
-			this.user = new User(this, username, "password");//creates user object
-			d_out.writeInt(MESSAGE_PACKET);
-			d_out.writeBytes("Welcome " + username + " to the chatbox!\n");
-		} else if (packetId == MESSAGE_PACKET) {// message
+		if(packetId == IDLE_PACKET)//Idle packet checks if the connection is closed
+			ping = 0;
+		else
+			timeout = MILI_DELAY;//timeout checks if the persons idle
+		
+		if (packetId == MESSAGE_PACKET) {// message
 			String msg = b_in.readLine();
 			distributeMessage(msg);
 		} else if(packetId == LOGIN_CHECK) {
