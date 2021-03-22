@@ -94,7 +94,7 @@ public class ClientThread extends Server implements Runnable {
 										// ping
 					} else {
 						clients.remove(this);
-						d_out.writeInt(IDLE_PACKET);// after TIMEOUT we let the client know we are ending things
+						d_out.writeInt(DISCONNECT_PACKET);// after TIMEOUT we let the client know we are ending things
 						System.out.println("Reaped Connection: " + socket.getInetAddress() + " Remaining Users: "
 								+ clients.size());
 						Thread.sleep(1000);// wait a second before closing the socket to make sure the int gets sent
