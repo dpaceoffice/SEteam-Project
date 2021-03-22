@@ -45,9 +45,8 @@ public class ClientThread extends Server implements Runnable {
 	 * @throws IOException
 	 */
 	private void handleIncommingPackets(int packetId) throws IOException {
-		if (packetId == IDLE_PACKET) {// ping
-			timeout = MILI_DELAY;
-		} else if (packetId == USERNAME_REQ) {
+		timeout = MILI_DELAY;
+		if (packetId == USERNAME_REQ) {
 			String username = b_in.readLine();
 			this.user = new User(this, username, "password");//creates user object
 			d_out.writeInt(MESSAGE_PACKET);
