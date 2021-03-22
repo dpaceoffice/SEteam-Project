@@ -109,13 +109,15 @@ public class ServerThread extends Packet implements Runnable {
 	private void handleIncommingPackets(int packetId) throws IOException {
 		if (packetId == MESSAGE_PACKET) {
 			System.out.println(b_in.readLine());
-		} else if (packetId == IDLE_PACKET) {// if client recieves this server closed socket
+		} else if(packetId == IDLE_PACKET) {
+			//idle packet, don't do anything
+		} else if (packetId == DISCONNECT_PACKET) {// if client recieves this server closed socket
 			System.out.println("You have been disconnected for being idle");
 			socket.close();
 			System.exit(0);
 		} else if (packetId == LOGIN_CHECK) {
-			boolean success = d_in.readInt() == 1 ? true : false;
-			gui.handleLoginReq(success);
+			int opcode = d_in.readInt();
+			gui.handleLoginReq(opcode);	
 		}
 	}
 
