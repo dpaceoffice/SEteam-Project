@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.LinkedList;
 
+import client.Client;
 import client.GUI;
 
 /**
@@ -19,12 +20,14 @@ public class ServerThread extends Packet implements Runnable {
 	 * State variables
 	 */
 	private Socket socket;
-	private String userName;
-	private final LinkedList<String> queuedMessages;
+	private String username;
+	private LinkedList<String> queuedMessages;
 	private DataOutputStream d_out;
 	private DataInputStream d_in;
 	private BufferedReader b_in;
 	private GUI gui;
+	private State state;
+	private Client client;
 
 	/**
 	 * Constructor
