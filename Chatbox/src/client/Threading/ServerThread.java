@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import client.Client;
 import client.GUI;
+import client.Registration;
 
 /**
  * ServerThread is a thread that handles all communications with the server
@@ -26,6 +27,7 @@ public class ServerThread extends Packet implements Runnable {
 	private DataInputStream d_in;
 	private BufferedReader b_in;
 	private GUI gui;
+	private Registration register;
 	private State state;
 	private Client client;
 
@@ -118,12 +120,26 @@ public class ServerThread extends Packet implements Runnable {
 		} else if (packetId == LOGIN_CHECK) {
 			int opcode = d_in.readInt();
 			gui.handleLoginReq(opcode);	
+		} else if (packetId == REGISTER_CHECK) {
+			int opcode = d_in.readInt();
+			register.handleRegistrationReq(opcode);	
 		}
 	}
 
 	public void checkLogin(String username, String pass) {
 		try {
 			d_out.writeInt(LOGIN_CHECK);
+			d_out.writeBytes(username + "\n");
+			d_out.writeBytes(pass + "\n");
+			this.username = username;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void register(String username, String pass) {
+		try {
+			d_out.writeInt(REGISTER_CHECK);
 			d_out.writeBytes(username + "\n");
 			d_out.writeBytes(pass + "\n");
 			this.username = username;
