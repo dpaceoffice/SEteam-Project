@@ -52,9 +52,14 @@ public class User {
         return !db.nameAvaliable(username);
     }
 
+    /**
+     * Input is the password we are checking
+     * @param input
+     * @return
+     */
     public boolean checkPassword(String input) {
         Database db = Database.getInstance();
-        String savedPass = db.getPassword(this.username);
+        String savedPass = db.getPassword(this.username);//stored database
         if(savedPass.equals(input)) 
             return true;
         return false;
