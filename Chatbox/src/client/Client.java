@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+import client.Threading.ServerThread;
+
 /**
  * Main client class
  */
@@ -26,6 +28,7 @@ public class Client {
 	private String ipAddress;
 	private int port;
 	private Scanner scan;
+	private Thread thread;
 
 	/**
 	 * Constructor
@@ -39,39 +42,40 @@ public class Client {
 	 * Simple method of requesting a name to use
 	 */
 	private void reqName() {
-		String name = null;
-		scan = new Scanner(System.in);
 		System.out.println("Please input username:");
-		while (name == null || name.trim().equals("")) {
+		while (this.name == "" || this.name.isEmpty()) {
 			// null, empty, whitespace(s) not allowed.
-			name = scan.nextLine();
-			if (name.trim().equals("")) {
+			this.name = this.scan.nextLine();
+			if (name.isEmpty()) {
 				System.out.println("Invalid. Please enter again:");
 			}
 		}
-		this.name = name;
 	}
 
-	// Request password from the user 
-	//@TODO savinng in DB;
+	// Request password from the user
+	// @TODO savinng in DB;
 	private void reqPassword() {
-		String password = null;
-		scan = new Scanner(System.in);
 		System.out.println("Please input password:");
-		while (password == null || password.trim().equals("")) {
+		while (this.password == "" || this.password.isEmpty()) {
 			// null, empty, whitespace(s) not allowed.
-			password = scan.nextLine();
-			if (password.trim().equals("")) {
+			this.password = this.scan.nextLine();
+			if (this.password.isEmpty()) {
 				System.out.println("Invalid. Please enter again:");
 			}
 		}
-		this.password =  BCrypt.hashpw(password, BCrypt.gensalt(12));
-		System.out.println(this.password);
 	}
 
-	// Checks if the password matches
-	private boolean checkPassword(String originalPassword, String generatedSecuredPasswordHash) {
-		return BCrypt.checkpw(originalPassword, generatedSecuredPasswordHash);
+
+// 	(?=.*[0-9]) a digit must occur at least once
+// (?=.*[a-z]) a lower case letter must occur at least once
+// (?=.*[A-Z]) an upper case letter must occur at least once
+// (?=.*[@#$%^&+=]) a special character must occur at least once
+// (?=\\S+$) no whitespace allowed in the entire string
+// .{8,} at least 8 characters
+
+	private boolean checkPasswordRequirement(String password) {
+		String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
+		return password.matches(pattern);
 	}
 
 	/**
@@ -82,15 +86,16 @@ public class Client {
 	private void startClient() {
 		try {
 			Socket socket = new Socket(ipAddress, port);
-			ServerThread serverThread = new ServerThread(socket, name);
-			Thread thread = new Thread(serverThread);
+			ServerThread serverThread = new ServerThread(socket, this);
+			this.scan = new Scanner(System.in);
+			thread = new Thread(serverThread);
 			thread.start();
 			while (thread.isAlive()) {
 				if (scan.hasNextLine()) {
-					serverThread.appendMessage(scan.nextLine());
+					String msg = scan.nextLine();
+					serverThread.appendMessage(msg);
 				}
 			}
-			scan.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -98,9 +103,9 @@ public class Client {
 
 	public static void main(String[] args) {
 		Client client = new Client(HOST, PORT);
+		client.startClient();
 		client.reqName();
 		client.reqPassword();
-		client.startClient();
 	}
 
 }

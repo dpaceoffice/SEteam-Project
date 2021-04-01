@@ -4,9 +4,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
-public class Server {
+import server.Threading.ClientThread;
+import server.Threading.Packet;
+import server.Users.State;
+
+public class Server extends Packet {
 
 	/**
 	 * Arraylist to keep track of active threads
@@ -38,19 +43,59 @@ public class Server {
 		}
 	}
 
-	public void distributeMessage(String msg) throws IOException {
-		// send input as output to all active threads including this one with user name
-		//BufferedWriter b_out = null;
-		DataOutputStream d_out = null;
-		for (ClientThread client : clients) {
-			// get current threads output stream
-			//b_out = client.getbWriter();
-			d_out = client.getdOutputStream();
-			if (d_out != null) {
-				d_out.writeInt(1);// String
-				d_out.writeBytes(msg + "\r\n");
-			}
-		}
+	public void distributeMessage(String msg) {
+		distributeMessage(msg, 0);
 	}
 
+	public boolean isOnline(String username) {
+		ClientThread current = null;
+		//try {
+			for (ClientThread client : clients) {
+				if (client.getUser() != null)
+					if (client.getUser().getUsername().equals(username))
+						if (client.getUser().getState() == State.CHATTING) 
+							return true;
+			}
+			return false;
+	}
+
+	/**
+	 * Distrubutes message to every client on network
+	 * 
+	 * @param msg
+	 */
+	public void distributeMessage(String msg, int index) {
+		int lastIndex = index;
+		try {
+			// send input as output to all active threads including this one with user name
+			// BufferedWriter b_out = null;
+			DataOutputStream d_out = null;
+			for (int i = lastIndex; i <= clients.size() - 1; i++) {
+				// get current threads output stream
+				// b_out = client.getbWriter();
+				ClientThread client = clients.get(i);
+				lastIndex = i;// update any changes to the last index we used.
+				if (client.getUser() == null || client.getUser().getState() != State.CHATTING)
+					continue;
+				d_out = client.getdOutputStream();
+				if (d_out != null) {
+					d_out.writeInt(MESSAGE_PACKET);// String packet
+					d_out.writeBytes("SERVER->" + msg + "\n");
+				}
+			}
+		} catch (IOException e) {
+			if (e instanceof SocketException) // if this happens its probably because the client closed before the
+												// server reaped
+												// the thread.
+				if (e.getMessage().contains("Connection reset by peer")) {
+					ClientThread last = clients.get(lastIndex);
+					clients.remove(lastIndex);
+					System.out.println(
+							"Disconnted Early:" + last.toString() + " Remaining Users: " + clients.size() + "");
+					distributeMessage(msg, lastIndex);// picks up where we left off.
+					return;
+				}
+			e.printStackTrace();
+		}
+	}
 }

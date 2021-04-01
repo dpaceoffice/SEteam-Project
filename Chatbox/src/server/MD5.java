@@ -1,4 +1,4 @@
-package com.rs.MYSQL.Integration;
+package server;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -16,21 +16,21 @@ public class MD5 {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static String generateSalt() {
-		
+
 		Random r = new Random();
-		
+
 		String set = "abcdefghijklmnopqrstuvwxyz`~1234567890-=!@#$%^&*()_+";
 		String salt = "";
-		
-		for(int i = 0; i < 5; i++) {
+
+		for (int i = 0; i < 5; i++) {
 			salt += set.charAt(r.nextInt(set.length()));
 		}
-		
+
 		return salt;
 	}
-	
+
 	public static String hash(String text) {
 		byte[] md5hash;
 		try {
@@ -56,11 +56,9 @@ public class MD5 {
 		}
 		return buf.toString();
 	}
-	
+
 	public static String hashedCode(String salt, String password) {
 		return MD5.hash(MD5.hash(salt) + MD5.hash(password));
 	}
-	
-	
 
 }

@@ -1,4 +1,4 @@
-package server;
+package server.sql;
 
 import java.sql.*;
 
@@ -25,7 +25,7 @@ public class Database {
      */
     private Database() {
         try {
-            con = DriverManager.getConnection("jdbc:sqlite:users.db");
+            con = DriverManager.getConnection("jdbc:sqlite:./Chatbox/src/server/sql/users.db");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,6 +70,26 @@ public class Database {
             e.printStackTrace();
         }
         return true;
+    }
+
+    /**
+     * Selects the password from user 
+     * 
+     * @param user of user
+     * @return string
+     */
+    public String getPassword(String user) {
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT password FROM registered_users WHERE username='"+ user +"'");
+            while (rs.next()) {
+                String pass = rs.getString("password");
+                return pass;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

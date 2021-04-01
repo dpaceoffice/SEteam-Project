@@ -1,4 +1,4 @@
-package client;
+package server;
 
 // Copyright (c) 2006 Damien Miller <djm@mindrot.org>
 //
