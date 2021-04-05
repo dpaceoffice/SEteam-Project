@@ -48,8 +48,6 @@ public class Server extends Packet {
 	}
 
 	public boolean isOnline(String username) {
-		ClientThread current = null;
-		//try {
 			for (ClientThread client : clients) {
 				if (client.getUser() != null)
 					if (client.getUser().getUsername().equals(username))
