@@ -61,7 +61,7 @@ public class User {
     public boolean checkPassword(String input) {
         Database db = Database.getInstance();
         String savedPass = db.getPassword(this.username);//stored database
-        return BCrypt.checkpw(savedPass, input);
+        return BCrypt.checkpw(input, savedPass);
     }
 
     public void saveUser() {
