@@ -53,11 +53,13 @@ public class Client {
 		this.name = name;
 	}*/
 
+
 	/**
 	 * Starts the thread that listens for messages from server Also keeps track of
 	 * keyboard input on client's parent thread (Client) to send to child thread
 	 * (ServerThread)
 	 */
+	
 	private void startClient() {
 		try {
 			Socket socket = new Socket(ipAddress, port);
@@ -78,7 +80,6 @@ public class Client {
 
 	public static void main(String[] args) {
 		Client client = new Client(HOST, PORT);
-		//client.reqName();
 		client.startClient();
 	}
 

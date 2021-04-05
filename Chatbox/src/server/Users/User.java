@@ -1,5 +1,6 @@
 package server.Users;
 
+import server.BCrypt;
 import server.Threading.ClientThread;
 import server.sql.Database;
 
@@ -60,9 +61,7 @@ public class User {
     public boolean checkPassword(String input) {
         Database db = Database.getInstance();
         String savedPass = db.getPassword(this.username);//stored database
-        if(savedPass.equals(input)) 
-            return true;
-        return false;
+        return BCrypt.checkpw(savedPass, input);
     }
 
     public void saveUser() {
@@ -70,11 +69,10 @@ public class User {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    db.insertRow(username, passwordHash);
+                    db.insertRow(username, BCrypt.hashpw(passwordHash, BCrypt.gensalt(12)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
         }).start();
     }
 
