@@ -2,7 +2,7 @@ Done: Create network handling to communicate messages sent from one client to re
 Done: Create framework for handling SQLite database
 Done: Create network handling so users can log into registered accounts
 Done: Create interface for login
-Create password encryption
+Done: Create password encryption
 Create network handling so users can register accounts with SQLite DB
 Create interface for registration
 Create interface for chatbox
