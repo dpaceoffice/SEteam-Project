@@ -35,8 +35,7 @@ public class Server extends Packet {
 				ClientThread client = new ClientThread(clientSocket);// initates new thread for accepted connection
 				new Thread(client).start();// starts the thread
 				clients.add(client);// adds thread to arraylist
-				System.out.println(
-						"Accepted Connection: " + clientSocket.getInetAddress() + " Current Users: " + clients.size());
+				client.debugOutput("Accepted Connection");
 			}
 
 		} catch (IOException e) {
@@ -89,8 +88,7 @@ public class Server extends Packet {
 				if (e.getMessage().contains("Connection reset by peer")) {
 					ClientThread last = clients.get(lastIndex);
 					clients.remove(lastIndex);
-					System.out.println(
-							"Disconnted Early:" + last.toString() + " Remaining Users: " + clients.size() + "");
+					last.debugOutput("Disconnected Early");
 					distributeMessage(msg, lastIndex);// picks up where we left off.
 					return;
 				}
