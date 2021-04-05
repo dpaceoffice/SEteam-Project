@@ -48,8 +48,6 @@ public class Server extends Packet {
 			if (client.getUser() != null)
 				if (client.getUser().getUsername().equals(username))
 					if (client.getUser().getState() == State.CHATTING)
-						if (client.getUser().getState() == State.CHATTING) 
-					if (client.getUser().getState() == State.CHATTING)
 						return true;
 		}
 		return false;
