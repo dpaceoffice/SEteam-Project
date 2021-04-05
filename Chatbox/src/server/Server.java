@@ -43,18 +43,26 @@ public class Server extends Packet {
 		}
 	}
 
-	public void distributeMessage(String msg) {
-		distributeMessage(msg, 0);
+	public boolean isOnline(String username) {
+		for (ClientThread client : clients) {
+			if (client.getUser() != null)
+				if (client.getUser().getUsername().equals(username))
+					if (client.getUser().getState() == State.CHATTING)
+						if (client.getUser().getState() == State.CHATTING) 
+					if (client.getUser().getState() == State.CHATTING)
+						return true;
+		}
+		return false;
 	}
 
-	public boolean isOnline(String username) {
-			for (ClientThread client : clients) {
-				if (client.getUser() != null)
-					if (client.getUser().getUsername().equals(username))
-						if (client.getUser().getState() == State.CHATTING) 
-							return true;
-			}
-			return false;
+	/**
+	 * Distributes message to every client on the network Sets the index to 0 by
+	 * default
+	 * 
+	 * @param msg
+	 */
+	public void distributeMessage(String msg) {
+		distributeMessage(msg, 0);
 	}
 
 	/**
@@ -62,7 +70,7 @@ public class Server extends Packet {
 	 * 
 	 * @param msg
 	 */
-	public void distributeMessage(String msg, int index) {
+	private void distributeMessage(String msg, int index) {
 		int lastIndex = index;
 		try {
 			// send input as output to all active threads including this one with user name
