@@ -17,6 +17,7 @@ public class Server extends Packet {
 	 * Arraylist to keep track of active threads
 	 */
 	public static ArrayList<ClientThread> clients;
+	public static boolean DEBUG_MODE = true;
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) {
