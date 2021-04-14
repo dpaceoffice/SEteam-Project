@@ -5,8 +5,8 @@ Done: Create interface for login
 Done: Create password encryption
 Done: Create network handling so users can register accounts with SQLite DB
 Create interface for registration
-Create interface for chatbox
-Make chatbox resizable
+Done: Create interface for chatbox
+Done: Make chatbox resizable
 Program chatbox functionality:
     User list for chatting users
     Buttons
