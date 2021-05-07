@@ -5,10 +5,15 @@ Done: Create interface for login
 Done: Create password encryption
 Done: Create network handling so users can register accounts with SQLite DB
 Done:Create interface for registration
-Add functionality to the registration panel
 Done: Create interface for chatbox
 Done: Make chatbox resizable
+
+
+NEEDS WORK:
+
 Program chatbox functionality:
     User list for chatting users
     Buttons
     Text displays
+Make the registration panel accessable from the GUI.java frame
+Add functionality to the registration panel / IN PROGRESS
