@@ -11,10 +11,14 @@ import client.Threading.State;
  */
 public class Registration extends javax.swing.JPanel {
 
+    private static final long serialVersionUID = 1L;
+    private ServerThread thread;
+
     /**
      * Creates new form Registration
      */
-    public Registration() {
+    public Registration(ServerThread thread, Client client) {
+        this.thread = thread;
         initComponents();
     }
 
@@ -49,6 +53,11 @@ public class Registration extends javax.swing.JPanel {
         registrationButton.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         registrationButton.setForeground(new java.awt.Color(255, 153, 0));
         registrationButton.setText("Register");
+        registrationButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registrationButtonActionPerformed(evt);
+            }
+        });
 
         passwordLabel.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         passwordLabel.setForeground(new java.awt.Color(102, 102, 0));
@@ -114,8 +123,61 @@ public class Registration extends javax.swing.JPanel {
         titleLabel.setText("The BOX");
         add(titleLabel);
         titleLabel.setBounds(271, 69, 248, 79);
-    }// </editor-fold>                        
 
+        userNameField.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    passwordField.requestFocusInWindow();
+                }
+            }
+        });
+        passwordField.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (passwordField.toString().isEmpty() || userNameField.getText().isEmpty())
+                        userNameField.requestFocusInWindow();
+                    else
+                    registrationButtonActionPerformed(null);
+                }
+            }
+        });
+    }// </editor-fold>                        
+    
+    private void registrationButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        String username = usernameField.getText();
+        String pass = String.valueOf(passwordField.getPassword());
+        thread.checkRegistration(username, pass);
+    }
+
+    public void handleRegistrationReq(int opcode) {
+         // TO DO
+    
+    }
+
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Registration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Registration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Registration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Registration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Registration(null,null).setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton forgotPasswordButton;
