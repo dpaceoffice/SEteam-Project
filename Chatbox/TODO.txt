@@ -4,7 +4,7 @@ Done: Create network handling so users can log into registered accounts
 Done: Create interface for login
 Done: Create password encryption
 Done: Create network handling so users can register accounts with SQLite DB
-Create interface for registration
+Done:Create interface for registration
 Add functionality to the registration panel
 Done: Create interface for chatbox
 Done: Make chatbox resizable
