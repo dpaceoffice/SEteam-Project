@@ -25,7 +25,7 @@ public class Database {
      */
     private Database() {
         try {
-            con = DriverManager.getConnection("jdbc:sqlite:./Chatbox/src/server/sql/users.db");
+            con = DriverManager.getConnection("jdbc:sqlite:src/server/sql/users.db");
         } catch (SQLException e) {
             e.printStackTrace();
         }

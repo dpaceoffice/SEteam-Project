@@ -124,7 +124,7 @@ public class Registration extends javax.swing.JPanel {
         add(titleLabel);
         titleLabel.setBounds(271, 69, 248, 79);
 
-        userNameField.addKeyListener(new KeyAdapter() {
+        usernameField.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     passwordField.requestFocusInWindow();
@@ -134,8 +134,8 @@ public class Registration extends javax.swing.JPanel {
         passwordField.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if (passwordField.toString().isEmpty() || userNameField.getText().isEmpty())
-                        userNameField.requestFocusInWindow();
+                    if (passwordField.toString().isEmpty() || usernameField.getText().isEmpty())
+                        usernameField.requestFocusInWindow();
                     else
                     registrationButtonActionPerformed(null);
                 }
@@ -145,7 +145,7 @@ public class Registration extends javax.swing.JPanel {
     
     private void registrationButtonActionPerformed(java.awt.event.ActionEvent evt) {
         String username = usernameField.getText();
-        String pass = String.valueOf(passwordField.getPassword());
+        String pass = String.valueOf(passwordField.getText());
         thread.checkRegistration(username, pass);
     }
 
