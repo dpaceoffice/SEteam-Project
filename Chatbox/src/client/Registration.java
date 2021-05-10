@@ -3,7 +3,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import client.Threading.ServerThread;
-import client.Threading.State;
 
 /**
  *

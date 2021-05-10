@@ -140,12 +140,12 @@ public class GUI extends javax.swing.JFrame {
         logoImg.setBackground(new java.awt.Color(0, 0, 0));
         logoImg.setFont(new java.awt.Font("Broadway", 0, 24)); // NOI18N
         logoImg.setForeground(new java.awt.Color(255, 204, 0));
-        logoImg.setIcon(new javax.swing.ImageIcon("./src/client/data/logo.png")); // NOI18N
+        logoImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/data/logo.png"))); // NOI18N
         getContentPane().add(logoImg);
         logoImg.setBounds(30, 20, 410, 90);
 
         bgImg.setBackground(new java.awt.Color(255, 0, 0));
-        bgImg.setIcon(new javax.swing.ImageIcon("./src/client/data/cutout.png")); // NOI18N
+        bgImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/data/cutout.png"))); // NOI18N
         getContentPane().add(bgImg);
         bgImg.setBounds(0, -10, 490, 400);
 
