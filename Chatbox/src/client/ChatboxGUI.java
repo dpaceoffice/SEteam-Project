@@ -3,7 +3,6 @@ package client;
 import java.awt.Point;
 
 import client.Threading.ServerThread;
-import server.Server;
 
 /**
  *
@@ -25,7 +24,6 @@ private Client client;
     }
 
     public void updateUsers() {
-        System.out.println(client.activeUserList[0]);
         userList.setModel(new javax.swing.AbstractListModel<String>() {
                 public int getSize() { return client.activeUserList.length; }
                 public String getElementAt(int i) { return client.activeUserList[i]; }

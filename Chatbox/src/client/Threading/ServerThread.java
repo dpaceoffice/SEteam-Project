@@ -116,6 +116,7 @@ public class ServerThread extends Packet implements Runnable {
 			String readMsg = b_in.readLine();
 			System.out.println(readMsg);
 			chatGui.appendMsg(readMsg+"\n");
+			updateList(chatGui);
 		} else if (packetId == DISCONNECT_PACKET) {// if client recieves this server closed socket
 			System.out.println("You have been disconnected for being idle");
 			socket.close();
