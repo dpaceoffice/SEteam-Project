@@ -14,6 +14,7 @@ public class GUI extends javax.swing.JFrame {
      */
     private static final long serialVersionUID = 1L;
     private ServerThread thread;
+    private Client client;
 
 
     /**
@@ -21,6 +22,7 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI(ServerThread thread, Client client) {
         this.thread = thread;
+        this.client = client;
         initComponents();
     }
 
@@ -178,9 +180,34 @@ public class GUI extends javax.swing.JFrame {
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
         infoPanel.setVisible(false);
         if(backButton.getText().equals("Continue")) {
-            thread.changeState(State.CHATTING.ordinal());
+            try {
+                for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+            } catch (ClassNotFoundException ex) {
+                java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                        ex);
+            } catch (InstantiationException ex) {
+                java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                        ex);
+            } catch (IllegalAccessException ex) {
+                java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                        ex);
+            } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+                java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                        ex);
+            }
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new ChatboxGUI(thread, client).setVisible(true);
+                    thread.changeState(State.CHATTING.ordinal());
+                    System.out.println("Enter a message below to chat:");
+                }
+            });
             this.setVisible(false);
-            System.out.println("Enter a message below to chat:");
         } else
             loginPanel.setVisible(true);
     }

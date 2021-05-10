@@ -18,6 +18,7 @@ public class Server extends Packet {
 	 */
 	public static ArrayList<ClientThread> clients;
 	public static boolean DEBUG_MODE = true;
+	public static String activeUserList;
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) {
@@ -41,6 +42,21 @@ public class Server extends Packet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void updateList(DataOutputStream d_out) throws IOException {
+		String current = "";
+		for (ClientThread client : clients) {
+			if (client.getUser() != null)
+					if (client.getUser().getState() == State.CHATTING) {
+						String username = client.getUser().getUsername();
+						current += username+",";
+						//*System.out.println("Username:"+username);
+					}
+		}
+		activeUserList = current+"\n";
+		d_out.writeInt(USER_LIST);
+		d_out.writeBytes(activeUserList);
 	}
 
 	public boolean isOnline(String username) {

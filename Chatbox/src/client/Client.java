@@ -27,6 +27,7 @@ public class Client {
 	private int port;
 	private Scanner scan;
 	private Thread thread;
+	public String[] activeUserList;
 
 	/**
 	 * Constructor

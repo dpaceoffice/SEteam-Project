@@ -78,6 +78,7 @@ public class ClientThread extends Server implements Runnable {
 				distributeMessage("Everyone, welcome " + user.getUsername() + ", to the chat!");
 				debugOutput("Successful Login");
 			}
+			updateList(d_out);
 		} else if (packetId == REGISTRATION_CHECK) {
 			String username = b_in.readLine();
 			String password = b_in.readLine();
@@ -87,6 +88,8 @@ public class ClientThread extends Server implements Runnable {
 				d_out.writeInt(4);// user doesn't exist
 				user.saveUser();// doesn't exist? just create it.
 			}
+		} else if (packetId == USER_LIST) {
+			updateList(d_out);
 		}
 	}
 

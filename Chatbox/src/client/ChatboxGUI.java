@@ -2,17 +2,37 @@ package client;
 
 import java.awt.Point;
 
+import client.Threading.ServerThread;
+import server.Server;
+
 /**
  *
  * @author David
  */
 public class ChatboxGUI extends javax.swing.JFrame {
 
+private ServerThread thread;
+private Client client;
+
     /**
      * Creates new form Chatbox
      */
-    public ChatboxGUI() {
+    public ChatboxGUI(ServerThread thread, Client client) {
+        this.thread = thread;
+        this.client = client;
+        thread.chatGui = this;
         initComponents();
+    }
+
+    public void updateUsers() {
+        System.out.println(client.activeUserList[0]);
+        userList.setModel(new javax.swing.AbstractListModel<String>() {
+                public int getSize() { return client.activeUserList.length; }
+                public String getElementAt(int i) { return client.activeUserList[i]; }
+            });
+    }
+    public void appendMsg(String msg) {
+            chatbox.append(msg);
     }
 
     private void initComponents() {
@@ -56,6 +76,7 @@ public class ChatboxGUI extends javax.swing.JFrame {
         userList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         userList.setSelectionBackground(new java.awt.Color(0, 0, 0));
         userList.setSelectionForeground(new java.awt.Color(255, 153, 0));
+        thread.updateList(this);
         userScrollPane.setViewportView(userList);
 
         messageField.setBackground(new java.awt.Color(102, 102, 102));
@@ -78,14 +99,9 @@ public class ChatboxGUI extends javax.swing.JFrame {
         sendButton.setBorderPainted(false);
         sendButton.setFocusable(false);
 
-        logoLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\under\\Pictures\\logo.png")); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/data/logo.png"))); // NOI18N
 
-        bgLabel.setIcon(new javax.swing.ImageIcon("C:\\Users\\under\\Pictures\\bgs\\superiorlife.jpg")); // NOI18N
-        bgLabel.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentMoved(java.awt.event.ComponentEvent evt) {
-                bgLabelComponentMoved(evt);
-            }
-        });
+        bgLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/data/superiorlife.jpg"))); // NOI18N
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -151,43 +167,12 @@ public class ChatboxGUI extends javax.swing.JFrame {
     }
 
     private void messageFieldActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        String msg = messageField.getText();
+        thread.appendMessage(msg);
+        messageField.setText("");
     }
 
-    private void bgLabelComponentMoved(java.awt.event.ComponentEvent evt) {
-        // TODO add your handling code here:
-    }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                    ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                    ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                    ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ChatboxGUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                    ex);
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ChatboxGUI().setVisible(true);
-            }
-        });
-    }
 
     Point initialClick;
 

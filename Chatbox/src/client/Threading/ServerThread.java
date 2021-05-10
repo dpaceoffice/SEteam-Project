@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.LinkedList;
 
+import client.ChatboxGUI;
 import client.Client;
 import client.GUI;
 import client.Registration;
@@ -26,6 +27,7 @@ public class ServerThread extends Packet implements Runnable {
 	private DataInputStream d_in;
 	private BufferedReader b_in;
 	private GUI gui;
+	public ChatboxGUI chatGui;
 	private Registration registration;
 	private State state;
 	private Client client;
@@ -111,7 +113,9 @@ public class ServerThread extends Packet implements Runnable {
 		if(packetId == IDLE_PACKET) {
 			d_out.writeInt(IDLE_PACKET);
 		} else if (packetId == MESSAGE_PACKET) {
-			System.out.println(b_in.readLine());
+			String readMsg = b_in.readLine();
+			System.out.println(readMsg);
+			chatGui.appendMsg(readMsg+"\n");
 		} else if (packetId == DISCONNECT_PACKET) {// if client recieves this server closed socket
 			System.out.println("You have been disconnected for being idle");
 			socket.close();
@@ -119,10 +123,22 @@ public class ServerThread extends Packet implements Runnable {
 		} else if (packetId == LOGIN_CHECK) {
 			int opcode = d_in.readInt();
 			gui.handleLoginReq(opcode);	
-		}
-		else if (packetId == REGISTRATION_CHECK) {
+		} else if (packetId == REGISTRATION_CHECK) {
 			int opcode = d_in.readInt();
 			registration.handleRegistrationReq(opcode);	
+		} else if (packetId == USER_LIST) {
+			String list = b_in.readLine();
+			client.activeUserList = list.split(",");
+			chatGui.updateUsers();
+		}
+	}
+
+	public void updateList(ChatboxGUI gui) {
+		try {
+			this.chatGui = gui;
+			d_out.writeInt(USER_LIST);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
