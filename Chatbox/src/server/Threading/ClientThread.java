@@ -68,7 +68,8 @@ public class ClientThread extends Server implements Runnable {
 				else
 					d_out.writeInt(0);// password failure
 			else {
-				d_out.writeInt(4);// user doesn't exist
+				//d_out.writeInt(4);// user doesn't exist
+				d_out.writeInt(1);// success
 				user.saveUser();// doesn't exist? just create it.
 			}
 		} else if (packetId == STATE_CHANGE) {
