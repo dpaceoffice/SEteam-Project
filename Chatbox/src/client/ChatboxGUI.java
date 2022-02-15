@@ -96,6 +96,11 @@ private Client client;
         sendButton.setBorder(new javax.swing.border.MatteBorder(null));
         sendButton.setBorderPainted(false);
         sendButton.setFocusable(false);
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    messageFieldActionPerformed(evt);
+                }
+            });
 
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/data/logo.png"))); // NOI18N
 
