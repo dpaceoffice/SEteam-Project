@@ -84,7 +84,7 @@ public class ClientThread extends Server implements Runnable {
 			String password = b_in.readLine();
 			user = new User(this, username, password);
 			d_out.writeInt(REGISTRATION_CHECK);
-			if(!user.userExists()){
+			if(!user.userExists()) {
 				d_out.writeInt(4);// user doesn't exist
 				user.saveUser();// doesn't exist? just create it.
 			}
